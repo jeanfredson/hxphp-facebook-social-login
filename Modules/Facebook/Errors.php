@@ -1,6 +1,6 @@
 <?php
-
 namespace HXPHP\System\Modules\Facebook;
+
 use HXPHP\System\Storage\Session\Session as Session;
 
 class Errors

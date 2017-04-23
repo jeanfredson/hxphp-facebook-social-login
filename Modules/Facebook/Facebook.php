@@ -1,5 +1,4 @@
 <?php
-
 namespace HXPHP\System\Modules\Facebook;
 
 class Facebook
