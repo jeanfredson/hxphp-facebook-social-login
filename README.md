@@ -7,14 +7,13 @@ Cadastro e Login com Facebook no seu projeto **HXPHP 2**.
 + Registre o módulo de configuração no `RegisterModules.php`, e;
 + Copie a pasta `Facebook`, deste repositório, para a pasta de módulos do seu projeto.
 
-## Uso
+## Configuração
 + Crie um aplicativo no Facebook;
 + Adicione o produto `Login do Facebook`;
 + Configure o `Login do Facebook` e informe as `URIs de redirecionamento do OAuth válidos`;
 + Liste as [permissões necessárias](https://developers.facebook.com/docs/facebook-login/permissions);
 + Revise o aplicativo (e envie uma análise se precisar de outras permissões) e torne ele `público`;
-+ Configurando:
-Defina as configurações, de acordo com o ambiente, no arquivo `app/config.php`. Os parâmetros são: `app_id`, `app_secret`, `permissions` e `fields`, respectivamente. Os valores informados no exemplo são ilustrativos, portanto, utilize apenas o que é necessário para a sua aplicação. Geralmente os dados fornecidos sem análise já são suficientes.
++ Defina as configurações, de acordo com o ambiente, no arquivo `app/config.php`. Os parâmetros são: `app_id`, `app_secret`, `permissions` e `fields`, respectivamente. Os valores informados no exemplo são ilustrativos, portanto, utilize apenas o que é necessário para a sua aplicação. Geralmente os dados fornecidos sem análise já são suficientes.
 ```php
 $configs->env->development->facebook->setConfigs(
     'app_id',
@@ -50,3 +49,5 @@ $configs->env->development->facebook->setConfigs(
     ]
 );
 ```
+
+## Uso
