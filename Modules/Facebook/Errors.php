@@ -17,7 +17,7 @@ class Errors
 	 */
 	private $session_name;
 
-	public function __construct($session_name)
+	public function __construct(string $session_name)
 	{
 		$this->session = new Session;
 		$this->session_name = $session_name;
@@ -25,7 +25,7 @@ class Errors
 		$this->session->clear($session_name);
 	}
 
-	public function add($msg)
+	public function add(string $msg)
 	{
 		$errors = [$msg];
 
@@ -37,7 +37,7 @@ class Errors
 		return $this->session->set($this->session_name, $errors);
 	}
 
-	public function hasError()
+	public function hasError(): bool
 	{
 		if (!$this->session->exists($this->session_name))
 			return false;

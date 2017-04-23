@@ -15,7 +15,7 @@ class Data
 	    return $arr;
 	}
 
-	public function get($userData)
+	public function get($userData): array
 	{
 		if (empty($userData))
 			return false;

@@ -36,7 +36,7 @@ class Facebook
 		$this->loginUrl = new LoginURL($this->helper, $configs->permissions);
 	}
 
-	public function getUserData($extended = false)
+	public function getUserData(bool $extended = false)
 	{
 		$fields = $extended === false ? 'id,email' : $this->configs->getFields();
 

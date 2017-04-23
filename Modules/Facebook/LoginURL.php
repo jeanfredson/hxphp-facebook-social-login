@@ -7,13 +7,13 @@ class LoginURL
 	private $helper = null;
 	private $permissions = null;
 
-	public function __construct($helper, $permissions)
+	public function __construct($helper, array $permissions)
 	{
 		$this->helper = $helper;
 		$this->permissions = $permissions;
 	}
 
-	public function get($url)
+	public function get(string $url)
 	{
 		return $this->helper->getLoginUrl($url, $this->permissions);
 	}

@@ -13,7 +13,7 @@ class RetrieveUserProfile
 		$this->errors = $errors;
 	}
 
-	public function get($fields, $accessToken)
+	public function get(string $fields, string $accessToken)
 	{
 		try {
 			$response = $this->fb->get('/me?fields=' . $fields, $accessToken);
