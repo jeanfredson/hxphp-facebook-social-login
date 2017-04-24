@@ -64,3 +64,10 @@ $facebook_redirect_uri = $domain . $this->getRelativeURL('login/facebook/', fals
 ```php
 $facebookLoginURI = $this->facebook->loginUrl->get($facebook_redirect_uri);
 ```
++ Passe a URI de login para a view:
+```php
+$this->view->setTitle('HXPHP - Faça login')
+            ->setVars([
+                'facebook_login_url' => $facebookLoginUrl
+            ]);
+```
