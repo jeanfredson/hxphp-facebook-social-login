@@ -51,7 +51,7 @@ $configs->env->development->facebook->setConfigs(
 ```
 
 ## Uso
-+ Carregue o módulo no controller:
++ Carregue o módulo nos controllers:
 ```php
 $this->load('Modules\Facebook', $this->configs->facebook);
 ```
@@ -70,4 +70,17 @@ $this->view->setTitle('HXPHP - Faça login')
             ->setVars([
                 'facebook_login_url' => $facebookLoginUrl
             ]);
+```
++ Adicione as configurações `(app/config.php)` do serviço de autenticação:
+```php
+$configs->env->development->auth->setURLs('/sistema/home/', '/sistema/login/');
+```
++ Carregue o serviço de autenticação nos controllers:
+```php
+$this->load(
+    'Services\Auth',
+    $configs->auth->after_login,
+    $configs->auth->after_logout,
+    true
+);
 ```
