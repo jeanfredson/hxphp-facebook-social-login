@@ -51,3 +51,16 @@ $configs->env->development->facebook->setConfigs(
 ```
 
 ## Uso
++ Carregue o módulo no controller:
+```php
+$this->load('Modules\Facebook', $this->configs->facebook);
+```
++ Defina a URI de redirecionamento:
+```php
+$domain = $this->configs->site->url;
+$facebook_redirect_uri = $domain . $this->getRelativeURL('login/facebook/', false);
+```
++ Gere a URI de login:
+```php
+$facebookLoginURI = $this->facebook->loginUrl->get($facebook_redirect_uri);
+```
