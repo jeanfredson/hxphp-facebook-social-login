@@ -57,7 +57,7 @@ $this->load('Modules\Facebook', $configs->facebook);
 ```
 + Defina a URI de redirecionamento:
 ```php
-$domain = $this->configs->site->url;
+$domain = $configs->site->url;
 $facebook_redirect_uri = $domain . $this->getRelativeURL('login/facebook/', false);
 ```
 + Gere a URI de login:
@@ -95,7 +95,8 @@ $this->load(
         $userData = $this->facebook->getUserData(); //Array com os dados do usuário
 
         if ($this->facebook->errors->hasError() || is_null($userData)) {
-            // Se ocorrer um erro durante o processo já será carregado no Alert helper. Portanto, certifique-se de adicioná-lo à view.
+            // Se ocorrer um erro durante o processo já será carregado no Alert helper. 
+            // Portanto, certifique-se de adicioná-lo à view.
             $this->load('Helpers\Alert', $this->facebook->errors->getErrors());
         }
         else {
@@ -107,7 +108,9 @@ $this->load(
                 ]);
             }
             else {
-                $exists = User::find_by_email_and_auth_type($userData['email'], 'Facebook'); // Uma maneira simples e de fácil entendimento para verificar se este usuário já está cadastrado. Pode ser alterado para usar a id e também otimizado para retornar apenas o COUNT e etc.
+                // Uma maneira simples e de fácil entendimento para verificar se este usuário já está cadastrado. 
+                // Pode ser alterado para usar a id e também otimizado para retornar apenas o COUNT e etc.
+                $exists = User::find_by_email_and_auth_type($userData['email'], 'Facebook'); 
 
                 if (is_null($exists)) {
                     // É o seu primeiro login, portanto, é feito o cadastro
@@ -118,8 +121,9 @@ $this->load(
                         'facebook_id' => $userData['id']
                     ];
                     
-                    // Consulte a seção Extras
-                    $cadastrarUsuario = User::register($post, 'user');
+                    // Este exemplo considera que seu método de cadastro é baseado neste padrão:
+                    // https://github.com/brunosantoshx/serie-criando-sistema-de-cadastro-e-login/blob/master/app/models/User.php
+                    $cadastrarUsuario = User::cadastrar($post, 'user');
 
                     if ($cadastrarUsuario->status === false) {
                         $this->load('Helpers\Alert', array(
@@ -157,6 +161,4 @@ $this->load(
         }
     }
 ```
-+ É importante adicionar uma regra que use a coluna `auth_type` no login através do formulário e também no recuperar senha, isto é, o usuário cadastrado através do Facebook deve acessar apenas através deste rede social. 
-
-## Extras
++ É importante adicionar uma regra que use a coluna `auth_type` no login através do formulário e também no recuperar senha, isto é, o usuário cadastrado através do Facebook deve acessar apenas através deste rede social.
