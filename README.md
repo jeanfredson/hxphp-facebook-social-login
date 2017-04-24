@@ -51,6 +51,8 @@ $configs->env->development->facebook->setConfigs(
 ```
 
 ## Uso
+#### Estas etapas se aplicam tanto para o cadastro como para o login:
+
 + Carregue o módulo nos controllers:
 ```php
 $this->load('Modules\Facebook', $this->configs->facebook);
@@ -84,3 +86,5 @@ $this->load(
     true
 );
 ```
+
+#### Estes procedimentos são exclusivos para o cadastro:
