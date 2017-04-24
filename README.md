@@ -141,7 +141,7 @@ $this->load(
                         */
                         
                         // LOGIN do usuário após o cadastro
-                        return $this->auth->login($exists->id, $exists->email);
+                        return $this->auth->login($cadastrarUsuario->user->id, $cadastrarUsuario->user->email);
                     }
                 }
                 else {
