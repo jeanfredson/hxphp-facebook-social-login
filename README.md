@@ -51,11 +51,9 @@ $configs->env->development->facebook->setConfigs(
 ```
 
 ## Uso
-#### Estas etapas se aplicam tanto para o cadastro como para o login:
-
-+ Carregue o módulo nos controllers:
++ Carregue o módulo no método construtor do controller:
 ```php
-$this->load('Modules\Facebook', $this->configs->facebook);
+$this->load('Modules\Facebook', $configs->facebook);
 ```
 + Defina a URI de redirecionamento:
 ```php
@@ -77,7 +75,7 @@ $this->view->setTitle('HXPHP - Faça login')
 ```php
 $configs->env->development->auth->setURLs('/sistema/home/', '/sistema/login/');
 ```
-+ Carregue o serviço de autenticação nos controllers:
++ Carregue o serviço de autenticação no método construtor do controller:
 ```php
 $this->load(
     'Services\Auth',
@@ -86,5 +84,72 @@ $this->load(
     true
 );
 ```
++ Adicione as colunas `facebook_id` e `auth_type` ao seu banco de dados. A coluna `auth_type` pode ser do tipo `ENUM` e o objetivo dela é diferenciar quem foi cadastrado através do formulário e quem foi através do Facebook.;
++ Crie a `action` de acordo com a URI de redirecionamento que foi definida:
+```php
+    public function facebookAction()
+    {
+        $this->auth->redirectCheck(true);
+        $this->view->setFile('index');
+    
+        $userData = $this->facebook->getUserData();
 
-#### Estes procedimentos são exclusivos para o cadastro:
+        if ($this->facebook->errors->hasError() || is_null($userData)) {
+            $this->load('Helpers\Alert', $this->facebook->errors->getErrors());
+        }
+        else {
+            if (!isset($userData['email'])) {
+                $this->load('Helpers\Alert', [
+                    'danger',
+                    'Oops! Não foi possível resgatar o seu e-mail. Por favor, verifique e tente novamente'
+                ]);
+            }
+            else {
+                $exists = User::find_by_email_and_auth_type($userData['email'], 'Facebook');
+
+                if (is_null($exists)) {
+                    // É o seu primeiro login, portanto, é feito o cadastro
+                    $post = [
+                        'name' => $userData['name'],
+                        'email' => $userData['email'],
+                        'auth_type' => 'Facebook',
+                        'facebook_id' => $userData['id']
+                    ];
+
+                    $cadastrarUsuario = User::register($post, 'user');
+
+                    if ($cadastrarUsuario->status === false) {
+                        $this->load('Helpers\Alert', array(
+                            'danger',
+                            'Ops! Não foi possível efetuar seu cadastro. <br> Verifique os erros abaixo:',
+                            $cadastrarUsuario->errors
+                        ));
+                    }
+                    else {
+                        /*
+                        Se você possui permissões adicionais aprovadas pode salvar outras informações do usuário em uma tabela específica.
+                        foreach ($userData as $field => $value) {
+                            UserMeta::addMeta($cadastrarUsuario->user->id, $field, $value);
+                        }
+                        */
+
+                        return $this->auth->login($exists->id, $exists->email);
+                    }
+                }
+                else {
+                    if ($exists->status === 'Inactive') {
+                        $this->load('Helpers\Alert', [
+                            'danger',
+                            'Oops! Não foi possível continuar com o seu login.',
+                            'O seu acesso encontra-se bloqueado. Por favor, contate o suporte para que a situação seja resolvida.'
+                        ]);
+                    }
+                    else {
+                        return $this->auth->login($exists->id, $exists->email);
+                    }
+                }
+            }
+        }
+    }
+```
++ É importante adicionar uma regra que use a coluna `auth_type` no login através do formulário e também no recuperar senha, isto é, o usuário cadastrado através do Facebook deve acessar apenas através deste rede social. 
