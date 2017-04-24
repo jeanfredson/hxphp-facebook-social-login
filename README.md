@@ -161,4 +161,3 @@ $this->load(
         }
     }
 ```
-+ É importante adicionar uma regra que use a coluna `auth_type` no login através do formulário e também no recuperar senha, isto é, o usuário cadastrado através do Facebook deve acessar apenas através deste rede social.
