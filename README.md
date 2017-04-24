@@ -84,28 +84,30 @@ $this->load(
     true
 );
 ```
-+ Adicione as colunas `facebook_id` e `auth_type` ao seu banco de dados. A coluna `auth_type` pode ser do tipo `ENUM` e o objetivo dela é diferenciar quem foi cadastrado através do formulário e quem foi através do Facebook.;
-+ Crie a `action` de acordo com a URI de redirecionamento que foi definida:
++ Adicione as colunas `facebook_id` e `auth_type` à coluna `users` do seu banco de dados. A coluna `auth_type` pode ser do tipo `ENUM` e o objetivo dela é diferenciar quem foi cadastrado através do formulário e quem foi através do Facebook;
++ Crie a `action` de acordo com a URI de redirecionamento que foi definida, isto é, como no exemplo consta `login/facebook/`, a action é `facebook`:
 ```php
     public function facebookAction()
     {
         $this->auth->redirectCheck(true);
         $this->view->setFile('index');
     
-        $userData = $this->facebook->getUserData();
+        $userData = $this->facebook->getUserData(); //Array com os dados do usuário
 
         if ($this->facebook->errors->hasError() || is_null($userData)) {
+            // Se ocorrer um erro durante o processo já será carregado no Alert helper. Portanto, certifique-se de adicioná-lo à view.
             $this->load('Helpers\Alert', $this->facebook->errors->getErrors());
         }
         else {
             if (!isset($userData['email'])) {
+                // É preciso que o usuário permita que o aplicativo obtenha o e-mail usado no Facebook. 
                 $this->load('Helpers\Alert', [
                     'danger',
                     'Oops! Não foi possível resgatar o seu e-mail. Por favor, verifique e tente novamente'
                 ]);
             }
             else {
-                $exists = User::find_by_email_and_auth_type($userData['email'], 'Facebook');
+                $exists = User::find_by_email_and_auth_type($userData['email'], 'Facebook'); // Uma maneira simples e de fácil entendimento para verificar se este usuário já está cadastrado. Pode ser alterado para usar a id e também otimizado para retornar apenas o COUNT e etc.
 
                 if (is_null($exists)) {
                     // É o seu primeiro login, portanto, é feito o cadastro
@@ -115,7 +117,8 @@ $this->load(
                         'auth_type' => 'Facebook',
                         'facebook_id' => $userData['id']
                     ];
-
+                    
+                    // Consulte a seção Extras
                     $cadastrarUsuario = User::register($post, 'user');
 
                     if ($cadastrarUsuario->status === false) {
@@ -132,7 +135,8 @@ $this->load(
                             UserMeta::addMeta($cadastrarUsuario->user->id, $field, $value);
                         }
                         */
-
+                        
+                        // LOGIN do usuário após o cadastro
                         return $this->auth->login($exists->id, $exists->email);
                     }
                 }
@@ -145,6 +149,7 @@ $this->load(
                         ]);
                     }
                     else {
+                        // LOGIN do usuário
                         return $this->auth->login($exists->id, $exists->email);
                     }
                 }
