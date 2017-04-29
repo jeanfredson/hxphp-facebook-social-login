@@ -58,12 +58,14 @@ $this->load('Modules\Facebook', $configs->facebook);
 + Recursos disponíveis:
     * `$this->facebook->loginUrl->get($facebook_redirect_uri);`:
         * O argumento é a URI para qual o usuário será redirecionado após fazer o login e permitir o acesso aos dados pelo seu aplicativo. Esta URI precisa constar nas `URIs de redirecionamento do OAuth válidos`;
-        * Este argumento também é responsável por definir qual será o `controller` e `action` responsáveis pelo cadastro/login do usuário na aplicação;
-        * Este seria um exemplo:
-            ```php
-                $domain = $configs->site->url;
-                $facebook_redirect_uri = $domain . $this->getRelativeURL('login/facebook/', false);
-            ```
+        * Este argumento também é responsável por definir qual será o `controller` e `action` responsáveis pelo **cadastro/login** do usuário na aplicação;
+        * Este é um exemplo quando o módulo é configurado no método construtor:
+        ```php
+        $domain = $configs->site->url;
+        $facebook_redirect_uri = $domain . $this->getRelativeURL('login/facebook/', false);
+        ```
         * O objetivo deste recurso é gerar a URI de login que será usada na `view`.
     * `$this->facebook->getUserData()`:
-        - Este recurso deverá 
+        - Este recurso é utilizado somente após a autenticação do usuário, isto é, deve ser usado no `controller` e `action` definidos na `$facebook_redirect_uri`;
+        - Seguindo o exemplo do item anterior, este recurso deveria ser usado no `controller` **Login** e na sua respectiva `action` **facebook**;
+        - O objetivo deste recurso é retornar um `array` com todos os dados obtidos do perfil do usuário. 
