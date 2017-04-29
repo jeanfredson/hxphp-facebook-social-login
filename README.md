@@ -57,6 +57,13 @@ $this->load('Modules\Facebook', $configs->facebook);
 ```
 + Recursos disponíveis:
     * `$this->facebook->loginUrl->get($facebook_redirect_uri);`:
-        *  O argumento é a URI para qual o usuário será redirecionado após fazer o login e permitir o acesso aos dados pelo seu aplicativo. Esta URI precisa constar nas `URIs de redirecionamento do OAuth válidos`;
-        *  O objetivo deste recurso é gerar a URI de login que será usada na `view`.
-    * 
+        * O argumento é a URI para qual o usuário será redirecionado após fazer o login e permitir o acesso aos dados pelo seu aplicativo. Esta URI precisa constar nas `URIs de redirecionamento do OAuth válidos`;
+        * Este argumento também é responsável por definir qual será o `controller` e `action` responsáveis pelo cadastro/login do usuário na aplicação;
+        * Este seria um exemplo:
+            ```php
+                $domain = $configs->site->url;
+                $facebook_redirect_uri = $domain . $this->getRelativeURL('login/facebook/', false);
+            ```
+        * O objetivo deste recurso é gerar a URI de login que será usada na `view`.
+    * `$this->facebook->getUserData()`:
+        - Este recurso deverá 
